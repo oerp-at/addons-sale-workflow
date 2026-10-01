@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2026, Weboffice IT-Service und Marketing GmbH & Co KG -->
+<odoo>
+    <record id="sot_sale_order_type_form_view_inherit" model="ir.ui.view">
+        <field name="name">sale.order.type.form.view.inherit.sale_order_type_project</field>
+        <field name="model">sale.order.type</field>
+        <field name="inherit_id" ref="sale_order_type_management.sot_sale_order_type_form_view_inherit" />
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page string="Project" name="page_project">
+                    <group>
+                        <field name="project_template_id" context="{'default_is_template': True}"/>
+                    </group>
+                    <group invisible="not project_template_id">
+                        <label for="optional_task_ids" colspan="4"/>
+                        <field name="optional_task_ids" colspan="4" nolabel="1"
+                               domain="[('project_id', '=', project_template_id), ('optional_task', '=', True), ('parent_id', '=', False)]"/>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>
