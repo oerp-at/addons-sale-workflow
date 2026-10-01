@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2026, Weboffice IT-Service und Marketing GmbH & Co KG
 
 """Convert ``sale.order.type.project_template_id`` from ``company_dependent``
@@ -28,7 +27,7 @@ def migrate(cr, version):
     if not row:
         # Column missing entirely (e.g. fresh install path) – nothing to do.
         return
-    if row[0] != 'jsonb':
+    if row[0] != "jsonb":
         # Already migrated by a prior run.
         return
 
