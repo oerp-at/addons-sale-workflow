@@ -1,15 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!-- Copyright 2026, Weboffice IT-Service und Marketing GmbH & Co KG -->
 <odoo>
     <!-- Overwrite of menu action to make it visible without debug mode -->
-    <menuitem
-        id="menu_project_config_project"
-        groups=""
-    />
+    <menuitem id="menu_project_config_project" groups="" />
 
     <menuitem
-        name="Link Mirror Task Stages"
         id="menu_project_config_project_task_type_link"
+        name="Link Mirror Task Stages"
         action="open_project_task_type_link_list_action"
         parent="project.menu_project_config"
         sequence="9"

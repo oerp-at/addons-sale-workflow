@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!-- Copyright 2026, Weboffice IT-Service und Marketing GmbH & Co KG -->
 <odoo>
     <record id="view_task_form2_inherit" model="ir.ui.view">
@@ -7,7 +7,7 @@
         <field name="inherit_id" ref="project.view_task_form2" />
         <field name="arch" type="xml">
             <xpath expr="//field[@name='stage_id']" position="before">
-                <field name="state_change_permission" invisible="True"/>
+                <field name="state_change_permission" invisible="True" />
             </xpath>
             <xpath expr="//field[@name='stage_id']" position="attributes">
                 <attribute name="readonly">not state_change_permission</attribute>
@@ -22,21 +22,27 @@
                 <attribute name="readonly">not state_change_permission</attribute>
             </xpath>
             <xpath expr="//field[@name='role_ids']" position="after">
-                <field name="mirror_project_id" invisible="not has_project_template and not is_template"
-                       domain="[('is_template', '=', False), ('id', '!=', project_id)]"/>
-                <field name="state_sync_direction" invisible="not mirror_project_id or not has_project_template and not is_template"/>
-                <field name="mirror_task_id" readonly="1"/>
+                <field
+                    name="mirror_project_id"
+                    invisible="not has_project_template and not is_template"
+                    domain="[('is_template', '=', False), ('id', '!=', project_id)]"
+                />
+                <field
+                    name="state_sync_direction"
+                    invisible="not mirror_project_id or not has_project_template and not is_template"
+                />
+                <field name="mirror_task_id" readonly="1" />
             </xpath>
         </field>
     </record>
 
-    <record id="view_task_kanban_inherit" model="ir.ui.view" >
+    <record id="view_task_kanban_inherit" model="ir.ui.view">
         <field name="name">project.task.kanban.inherit.sale_order_task</field>
         <field name="model">project.task</field>
         <field name="inherit_id" ref="project.view_task_kanban" />
         <field name="arch" type="xml">
             <xpath expr="//field[@name='stage_id']" position="before">
-                <field name="state_change_permission" invisible="True"/>
+                <field name="state_change_permission" invisible="True" />
             </xpath>
             <xpath expr="//field[@name='stage_id']" position="attributes">
                 <attribute name="readonly">not state_change_permission</attribute>
