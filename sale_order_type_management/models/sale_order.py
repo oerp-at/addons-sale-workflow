@@ -40,16 +40,14 @@ class SaleOrder(models.Model):
         for rec in self:
             rec.migrated_sale_order_count = len(rec.migrated_sale_order_ids)
 
-    def _create_invoices(self, grouped=False, final=False, date=None):
+    def _create_invoices(self, final=False, grouped=False):
         # A sale order type flagged ``no_invoice`` must not produce invoices
         # on any path (wizard, list action, programmatic), not only by hiding
         # the form buttons.
         allowed = self.filtered(lambda o: not o.type_id.no_invoice)
         if not allowed:
             return self.env["account.move"]
-        return super(SaleOrder, allowed)._create_invoices(
-            grouped=grouped, final=final, date=date
-        )
+        return super(SaleOrder, allowed)._create_invoices(final=final, grouped=grouped)
 
     @api.onchange("type_id")
     def _onchange_type_id(self):
