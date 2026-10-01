@@ -1,0 +1,195 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sale_order_type_management
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-18 14:47+0000\n"
+"PO-Revision-Date: 2026-02-18 14:47+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sale_order_type_management
+#: model_terms:ir.ui.view,arch_db:sale_order_type_management.sot_view_order_form_inherit
+msgid "<span class=\"o_stat_text\">Source Order</span>"
+msgstr "<span class=\"o_stat_text\">Ursprungsauftrag</span>"
+
+#. module: sale_order_type_management
+#: model:ir.model.fields,field_description:sale_order_type_management.field_sale_order_type__template_ids
+msgid "Available Sale Order Templates"
+msgstr "Verfügbare Verkaufsauftragsvorlagen"
+
+#. module: sale_order_type_management
+#: model:ir.model.fields,field_description:sale_order_type_management.field_sale_order__available_template_ids
+#: model:ir.model.fields,field_description:sale_order_type_management.field_sale_order_type__available_template_ids
+msgid "Available Template"
+msgstr ""
+
+#. module: sale_order_type_management
+#: model:ir.model.fields,field_description:sale_order_type_management.field_sale_order__possible_migration_order_type_ids
+#: model:ir.model.fields,field_description:sale_order_type_management.field_sale_order_type__migration_order_type_ids
+msgid "Available for Migration"
+msgstr "Mögliche Umwandlungsstypen"
+
+#. module: sale_order_type_management
+#: model:ir.model.fields,field_description:sale_order_type_management.field_sale_order_type__default_template_id
+msgid "Default Template"
+msgstr "Standardvorlage"
+
+#. module: sale_order_type_management
+#: model_terms:ir.ui.view,arch_db:sale_order_type_management.sot_sale_order_type_form_view_inherit
+msgid "Description"
+msgstr "Beschreibung"
+
+#. module: sale_order_type_management
+#: model:ir.model.fields,field_description:sale_order_type_management.field_sale_order__display_name
+#: model:ir.model.fields,field_description:sale_order_type_management.field_sale_order_line__display_name
+#: model:ir.model.fields,field_description:sale_order_type_management.field_sale_order_type__display_name
+msgid "Display Name"
+msgstr "Anzeigename"
+
+#. module: sale_order_type_management
+#: model:ir.model.fields,field_description:sale_order_type_management.field_sale_order__id
+#: model:ir.model.fields,field_description:sale_order_type_management.field_sale_order_line__id
+#: model:ir.model.fields,field_description:sale_order_type_management.field_sale_order_type__id
+msgid "ID"
+msgstr ""
+
+#. module: sale_order_type_management
+#: model_terms:ir.ui.view,arch_db:sale_order_type_management.sot_sale_order_type_form_view_inherit
+msgid "Invoicing"
+msgstr "Verrechnung"
+
+#. module: sale_order_type_management
+#: model_terms:ir.ui.view,arch_db:sale_order_type_management.sot_view_order_form_inherit
+msgid "Migrate"
+msgstr "Umwandeln"
+
+#. module: sale_order_type_management
+#: model_terms:ir.ui.view,arch_db:sale_order_type_management.sot_view_order_form_inherit
+msgid "Migrated"
+msgstr "Umgewandelt"
+
+#. module: sale_order_type_management
+#: model:ir.model.fields,field_description:sale_order_type_management.field_sale_order__migrated_sale_order_count
+msgid "Migrated Sale Order Count"
+msgstr "Anzahl umgewandelter Aufträge"
+
+#. module: sale_order_type_management
+#. odoo-python
+#: code:addons/sale_order_type_management/models/sale_order.py:0
+msgid "Migrated Sale Order: %s"
+msgstr "Verkaufsauftrag umgewandelt: %s"
+
+#. module: sale_order_type_management
+#. odoo-python
+#: code:addons/sale_order_type_management/models/sale_order.py:0
+#: model:ir.model.fields,field_description:sale_order_type_management.field_sale_order__migrated_sale_order_ids
+msgid "Migrated Sale Orders"
+msgstr "Umgewandelter Auftrag"
+
+#. module: sale_order_type_management
+#: model:ir.model.fields,field_description:sale_order_type_management.field_sale_order__migration_order_type_id
+msgid "Migration Type"
+msgstr "Umwandeln zu"
+
+#. module: sale_order_type_management
+#: model:ir.model.fields,field_description:sale_order_type_management.field_sale_order__order_type_no_delivery
+#: model:ir.model.fields,field_description:sale_order_type_management.field_sale_order_type__no_delivery
+msgid "No Delivery"
+msgstr "Keine Lieferung"
+
+#. module: sale_order_type_management
+#: model:ir.model.fields,field_description:sale_order_type_management.field_sale_order__order_type_no_invoice
+#: model:ir.model.fields,field_description:sale_order_type_management.field_sale_order_type__no_invoice
+msgid "No Invoice"
+msgstr "Keine Rechnung"
+
+#. module: sale_order_type_management
+#: model_terms:ir.ui.view,arch_db:sale_order_type_management.sot_sale_order_type_form_view_inherit
+msgid "Options"
+msgstr "Optionen"
+
+#. module: sale_order_type_management
+#: model:ir.model.fields,help:sale_order_type_management.field_sale_order__order_type_no_invoice
+#: model:ir.model.fields,help:sale_order_type_management.field_sale_order_type__no_invoice
+msgid "Prevents creation of invoice out of the sale order"
+msgstr ""
+"Verhindert das Erstellen von Rechnungen aus dem Verkaufsauftrag heraus"
+
+#. module: sale_order_type_management
+#: model:ir.model.fields,help:sale_order_type_management.field_sale_order__order_type_no_delivery
+#: model:ir.model.fields,help:sale_order_type_management.field_sale_order_type__no_delivery
+msgid "Prevents the creation of deliveries when confirming the sale order"
+msgstr ""
+"Verhindert das Erstellen von Lieferungen, wenn der Verkaufsauftrag bestätigt"
+" wird"
+
+#. module: sale_order_type_management
+#: model_terms:ir.ui.view,arch_db:sale_order_type_management.sot_sale_order_type_form_view_inherit
+msgid "Routes"
+msgstr "Routen"
+
+#. module: sale_order_type_management
+#. odoo-python
+#: code:addons/sale_order_type_management/models/sale_order.py:0
+msgid "Sale Order migrated from: %s"
+msgstr "Verkaufsauftrag umgewandelt aus: %s"
+
+#. module: sale_order_type_management
+#: model:ir.model,name:sale_order_type_management.model_sale_order
+msgid "Sales Order"
+msgstr "Verkaufsauftrag"
+
+#. module: sale_order_type_management
+#: model:ir.model,name:sale_order_type_management.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Verkaufsauftragszeile"
+
+#. module: sale_order_type_management
+#: model:ir.model.fields,field_description:sale_order_type_management.field_sale_order__source_sale_order_id
+msgid "Source Order"
+msgstr "Ursprungsauftrag"
+
+#. module: sale_order_type_management
+#: model:ir.model.fields,help:sale_order_type_management.field_sale_order_type__default_template_id
+msgid "The default template for the sale order if this type is selected"
+msgstr ""
+"Die Standardvorlage für den Verkaufsauftrag, wenn dieser Typ ausgewählt ist"
+
+#. module: sale_order_type_management
+#: model:ir.model.fields,help:sale_order_type_management.field_sale_order_type__template_ids
+msgid ""
+"The templates which are available for this sale order type. If none are "
+"selected, all templates are available."
+msgstr ""
+"Die für diesen Verkaufsauftragstyp verfügbaren Vorlagen. Wenn keine "
+"ausgewählt ist, stehen alle Vorlagen zur Verfügung."
+
+#. module: sale_order_type_management
+#: model:ir.model.fields,help:sale_order_type_management.field_sale_order__possible_migration_order_type_ids
+#: model:ir.model.fields,help:sale_order_type_management.field_sale_order_type__migration_order_type_ids
+msgid "The types which are available for migration"
+msgstr "Die Typen, die für die Umwandlung verfügbar sind"
+
+#. module: sale_order_type_management
+#: model:ir.model,name:sale_order_type_management.model_sale_order_type
+msgid "Type of sale order"
+msgstr "Art des Verkaufsauftrags"
+
+#. module: sale_order_type_management
+#: model_terms:ir.ui.view,arch_db:sale_order_type_management.sot_sale_order_type_form_view_inherit
+msgid "Workflow"
+msgstr ""
+
+#. module: sale_order_type_management
+#. odoo-python
+#: code:addons/sale_order_type_management/models/sale_order.py:0
+msgid "id"
+msgstr ""
