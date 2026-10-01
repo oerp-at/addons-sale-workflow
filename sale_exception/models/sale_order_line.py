@@ -8,7 +8,7 @@ from odoo.fields import Command
 
 
 class SaleOrderLine(models.Model):
-    _inherit = ["sale.order.line", "base.exception.method"]
+    _inherit = ["sale.order.line", "base.exception.method"]  # noqa: RUF012
     _name = "sale.order.line"
 
     exception_ids = fields.Many2many(
