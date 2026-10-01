@@ -11,7 +11,8 @@ class SaleOrder(models.Model):
     def _action_confirm(self):
         for order in self.sudo():
             if order.type_id and order.type_id.project_template_id:
-                # If a project template is set in the sale order type, we create a project for the sale order
+                # If a project template is set in the sale order type, we create a
+                # project for the sale order
                 # independent of a sale order line
                 order.with_company(order.company_id)._create_order_type_project()
         return super()._action_confirm()
@@ -73,7 +74,7 @@ class SaleOrder(models.Model):
     def _order_type_project_values(self):
         """Generate project values"""
         return {
-            "name": "%s - %s" % (self.client_order_ref, self.name)
+            "name": f"{self.client_order_ref} - {self.name}"
             if self.client_order_ref
             else self.name,
             "account_id": self.env.context.get("project_account_id")
@@ -91,14 +92,15 @@ class SaleOrder(models.Model):
         }
 
     def _get_so_project_name(self, name, project_template):
-        return "%s - %s" % (name, project_template.name)
+        return f"{name} - {project_template.name}"
 
     def _handle_tasks_to_copy(self, project):
-        """Filter out optional tasks except for those defined in the sale order type or those that have a
-        sale order line with this task as a template
+        """Filter out optional tasks except for those defined in the sale order
+        type or those that have a sale order line with this task as a template.
         """
         optional_tasks_to_include = self.type_id.optional_task_ids
-        # Include optional tasks of individual sale order lines if they have a so task template with the same project template id
+        # Include optional tasks of individual sale order lines if they have a so task
+        # template with the same project template id
         order_lines = self.order_line.filtered(
             lambda sol: (
                 sol.product_id.service_tracking == "so_project_task_templates"
@@ -119,17 +121,19 @@ class SaleOrder(models.Model):
         "order_type_project_id", "order_line.product_id", "order_line.project_id"
     )
     def _compute_project_ids(self):
-        super()._compute_project_ids()
+        result = super()._compute_project_ids()
         for order in self:
             if order.order_type_project_id:
                 # Add the order_type_project_id to the project_ids for the smart button
                 order.project_ids |= order.order_type_project_id
                 order.project_count = len(order.project_ids.filtered("active"))
+        return result
 
     def action_view_project_ids(self):
         """
-        Overwrite of the original method, except the check for order lines - otherwise empty lines meant you couldn't
-        click the button to view your sale order project
+        Overwrite of the original method, except the check for order lines -
+        otherwise empty lines meant you couldn't click the button to view your
+        sale order project.
         """
         self.ensure_one()
 

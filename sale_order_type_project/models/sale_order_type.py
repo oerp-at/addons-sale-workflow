@@ -8,7 +8,6 @@ class SaleOrderTypology(models.Model):
 
     project_template_id = fields.Many2one(
         "project.project",
-        "Project Template",
         domain='[("is_template", "=", True)]',
         help="Project Template that will be created on Sale Order Confirmation",
     )

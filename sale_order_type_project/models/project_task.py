@@ -7,7 +7,8 @@ class ProjectTask(models.Model):
     _inherit = "project.task"
 
     optional_task = fields.Boolean(
-        help="Tasks marked as optional will not be created in Sale Order Type Project unless "
+        help="Tasks marked as optional will not be created in Sale Order Type Project "
+        "unless "
         "explicitly included"
     )
 
@@ -21,7 +22,7 @@ class ProjectTask(models.Model):
 
     def copy_data(self, default=None):
         vals_list = super().copy_data(default=default)
-        for task, vals in zip(self, vals_list):
+        for task, vals in zip(self, vals_list, strict=True):
             # Only record the origin when copying from a template - either a
             # template project (the SO type project template) or a template
             # task - so a plain project/task duplication doesn't get spurious
@@ -47,10 +48,14 @@ class ProjectTask(models.Model):
                 continue
             target = task.project_id
             depends = target.task_ids.filtered(
-                lambda t: t.source_template_task_id in template_task.depend_on_ids
+                lambda t, tpl=template_task: (
+                    t.source_template_task_id in tpl.depend_on_ids
+                )
             )
             dependents = target.task_ids.filtered(
-                lambda t: t.source_template_task_id in template_task.dependent_ids
+                lambda t, tpl=template_task: (
+                    t.source_template_task_id in tpl.dependent_ids
+                )
             )
             task.depend_on_ids = [Command.set(depends.ids)]
             task.dependent_ids = [Command.set(dependents.ids)]

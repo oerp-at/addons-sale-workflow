@@ -3,7 +3,8 @@
 # noinspection PyStatementEffect
 {
     "name": "Sale Order Type Project",
-    "summary": "Set a Project Template for Sale Order Types and gain the ability to set optional Tasks",
+    "summary": "Set a Project Template for Sale Order Types and gain the ability to "
+    "set optional Tasks",
     "author": "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/sale-workflow",
     "category": "Sales Management",
