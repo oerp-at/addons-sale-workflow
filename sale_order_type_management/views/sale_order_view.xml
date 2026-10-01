@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2026, Weboffice IT-Service und Marketing GmbH & Co KG -->
+<odoo>
+    <record id="sale_order_form_quote_inherit" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.sale_order_type_management</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_management.sale_order_form_quote" />
+        <field name="priority" eval="20" />
+        <field name="arch" type="xml">
+            <button id="create_invoice" position="attributes">
+                <attribute
+                    name="invisible"
+                    add="order_type_no_invoice == True"
+                    separator=" or "
+                />
+            </button>
+            <button id="create_invoice_percentage" position="attributes">
+                <attribute
+                    name="invisible"
+                    add="order_type_no_invoice == True"
+                    separator=" or "
+                />
+            </button>
+            <button id="send_proforma_primary" position="attributes">
+                <attribute
+                    name="invisible"
+                    add="order_type_no_invoice == True"
+                    separator=" or "
+                />
+            </button>
+            <button id="send_proforma" position="attributes">
+                <attribute
+                    name="invisible"
+                    add="order_type_no_invoice == True"
+                    separator=" or "
+                />
+            </button>
+
+            <field name="partner_shipping_id" position="attributes">
+                <attribute
+                    name="invisible"
+                    add="order_type_no_delivery == True"
+                    separator=" or "
+                />
+            </field>
+
+            <field name="sale_order_template_id" position="attributes">
+                <attribute
+                    name="domain"
+                >[('id', 'in', available_template_ids)]</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="sot_view_order_form_inherit" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.sale_order_type_management</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_order_type.sot_view_order_form" />
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button
+                    string="Migrate"
+                    name="action_migrate_sale_order"
+                    type="object"
+                    data-hotkey="shift+y"
+                    class="btn-primary"
+                    invisible="not migration_order_type_id or state != 'sale'"
+                />
+            </header>
+
+            <field name="type_id" position="after">
+                <field
+                    name="migration_order_type_id"
+                    options="{'no_create': True}"
+                    invisible="not possible_migration_order_type_ids"
+                />
+            </field>
+
+            <div name="button_box" position="inside">
+                <button
+                    name="action_view_source_order"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-dollar"
+                    invisible="not source_sale_order_id"
+                >
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Source Order</span>
+                    </div>
+                </button>
+                <button
+                    name="action_view_migrated_orders"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-dollar"
+                    invisible="migrated_sale_order_count == 0"
+                >
+                    <field
+                        name="migrated_sale_order_count"
+                        widget="statinfo"
+                        string="Migrated"
+                    />
+                </button>
+            </div>
+        </field>
+    </record>
+</odoo>
