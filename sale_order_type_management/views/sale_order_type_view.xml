@@ -7,6 +7,7 @@
         >sale.order.type.form.view.inherit.sale_order_type_management</field>
         <field name="model">sale.order.type</field>
         <field name="inherit_id" ref="sale_order_type.sot_sale_order_type_form_view" />
+        <field name="priority" eval="99" />
         <field name="arch" type="xml">
             <field name="route_ids" position="replace">
                 <field name="template_ids" widget="many2many_tags" />

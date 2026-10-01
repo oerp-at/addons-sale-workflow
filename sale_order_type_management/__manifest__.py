@@ -2,7 +2,8 @@
 # noinspection PyStatementEffect
 {
     "name": "Sale Order Type Management",
-    "summary": "Configure Sale Order Types and migrate them into a new Sale Order for workflows",
+    "summary": "Configure Sale Order Types and migrate them into a new Sale Order for "
+    "workflows",
     "author": "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/sale-workflow",
     "category": "Sales Management",
