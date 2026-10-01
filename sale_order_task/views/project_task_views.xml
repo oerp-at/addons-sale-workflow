@@ -37,9 +37,9 @@
     </record>
 
     <record id="view_task_kanban_inherit" model="ir.ui.view">
-        <field name="name">project.task.kanban.inherit.sale_order_task</field>
+        <field name="name">project.task.card.inherit.sale_order_task</field>
         <field name="model">project.task</field>
-        <field name="inherit_id" ref="project.view_task_kanban" />
+        <field name="inherit_id" ref="project.view_task_card" />
         <field name="arch" type="xml">
             <xpath expr="//field[@name='stage_id']" position="before">
                 <field name="state_change_permission" invisible="True" />

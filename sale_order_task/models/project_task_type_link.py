@@ -22,7 +22,7 @@ class ProjectTaskTypeLink(models.Model):
         compute="_compute_first_stage_project_ids",
     )
     second_stage_project_ids = fields.Many2many(
-        related="second_stage_id.project_ids",
+        "project.project",
         string="Second Stage Projects",
         compute="_compute_second_stage_project_ids",
     )
@@ -37,8 +37,7 @@ class ProjectTaskTypeLink(models.Model):
             if rec.first_stage_id:
                 rec.first_stage_project_ids = rec.first_stage_id.project_ids.filtered(
                     lambda p: (
-                        p.company_id in rec.env.user.company_ids
-                        or p.company_id == False
+                        not p.company_id or p.company_id in rec.env.user.company_ids
                     )
                 )
             else:
@@ -50,8 +49,7 @@ class ProjectTaskTypeLink(models.Model):
             if rec.second_stage_id:
                 rec.second_stage_project_ids = rec.second_stage_id.project_ids.filtered(
                     lambda p: (
-                        p.company_id in rec.env.user.company_ids
-                        or p.company_id == False
+                        not p.company_id or p.company_id in rec.env.user.company_ids
                     )
                 )
             else:

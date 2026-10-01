@@ -18,11 +18,13 @@ class TestSaleOrderTask(TransactionCase):
         mirror_project = self.env["project.project"].create(
             {
                 "name": "Mirror Project",
+                "type_ids": [Command.clear()],  # no 20.0 default stages
             }
         )
         project_template = self.env["project.project"].create(
             {
                 "name": "Project Template",
+                "type_ids": [Command.clear()],  # no 20.0 default stages
                 "is_template": True,
             }
         )
@@ -120,16 +122,19 @@ class TestSaleOrderTask(TransactionCase):
         mirror_project = self.env["project.project"].create(
             {
                 "name": "Mirror Project",
+                "type_ids": [Command.clear()],  # no 20.0 default stages
             }
         )
         project_template_one, project_template_two = self.env["project.project"].create(
             [
                 {
                     "name": "Project Template One",
+                    "type_ids": [Command.clear()],  # no 20.0 default stages
                     "is_template": True,
                 },
                 {
                     "name": "Project Template Two",
+                    "type_ids": [Command.clear()],  # no 20.0 default stages
                     "is_template": True,
                 },
             ]
