@@ -75,6 +75,11 @@ coexist.
   core history checks.
 - `_filter_out_non_mirrorable_vals` strips `project_id`, `parent_id`, `child_ids`,
   `mirror_*`, `sale_*` from mirror writes.
+- Dates: a new mirror starts with the original's `date_deadline` and, when
+  `project_enterprise` is installed, `planned_date_begin` (both `copy=False`, re-applied
+  in `copy_data` under `mirror_task_copy`). Later date changes propagate like any other
+  field. This replaces the 19.0 module `sale_order_task_fsm` (Field Service only;
+  `industry_fsm` no longer exists in 20.0).
 
 ## Views & Menus
 
