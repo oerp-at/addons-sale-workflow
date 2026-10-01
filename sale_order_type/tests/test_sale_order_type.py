@@ -11,6 +11,9 @@ from odoo.addons.base.tests.common import BaseCommon
 
 
 class TestSaleOrderType(BaseCommon):
+    # Since 20.0 BaseCommon runs tests as a basic user; keep the admin env
+    _test_user_groups = ()
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
