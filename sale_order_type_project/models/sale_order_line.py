@@ -17,7 +17,8 @@ class SaleOrderLine(models.Model):
         return task_ids
 
     def _get_task_template_so_lines(self, so):
-        # If there is a sale order type project and the so line's task is an optional line in this project, it was
+        # If there is a sale order type project and the so line's task is an optional
+        # line in this project, it was
         # already created with the creation of the project, so we filter those out
         so_lines = super()._get_task_template_so_lines(so)
         if so.type_id.project_template_id:

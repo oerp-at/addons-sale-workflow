@@ -14,7 +14,7 @@ class ProjectProject(models.Model):
         )
 
         if self.allow_task_dependencies and "task_mapping" not in self.env.context:
-            self = self.with_context(task_mapping=dict())
+            self = self.with_context(task_mapping={})  # noqa: PLW0642
         # preserve task name and stage, normally altered during copy
         defaults = self._map_tasks_default_values(new_project)
         new_tasks = tasks.with_context(copy_project=True).copy(defaults)
