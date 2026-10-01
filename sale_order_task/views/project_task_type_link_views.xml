@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2026, Weboffice IT-Service und Marketing GmbH & Co KG -->
+<odoo>
+    <record id="project_task_type_link_list" model="ir.ui.view">
+        <field name="name">project.task.type.link.list</field>
+        <field name="model">project.task.type.link</field>
+        <field name="arch" type="xml">
+            <list string="Linked Mirror Task Stages" editable="bottom">
+                <field name="sequence" widget="handle" optional="show"/>
+                <field name="used_stage_ids" column_invisible="True"/>
+                <field name="first_stage_id" domain="[('id', 'not in', used_stage_ids), ('user_id', '=', False)]"
+                       options="{'no_create': True}"/>
+                <field name="first_stage_project_ids" widget="many2many_tags"/>
+                <field name="second_stage_id" domain="[('id', 'not in', used_stage_ids), ('user_id', '=', False)]"
+                       options="{'no_create': True}"/>
+                <field name="second_stage_project_ids" widget="many2many_tags"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="open_project_task_type_link_list_action" model="ir.actions.act_window">
+        <field name="name">Linked Mirror Task Stages</field>
+        <field name="res_model">project.task.type.link</field>
+        <field name="path">task-stage-link</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="project_task_type_link_list"/>
+        <field name="context">{'default_user_id': False}</field>
+    </record>
+</odoo>

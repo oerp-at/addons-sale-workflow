@@ -1,0 +1,250 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sale_order_task
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-01-21 07:43+0000\n"
+"PO-Revision-Date: 2026-01-21 07:43+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sale_order_task
+#: model:ir.model.fields.selection,name:sale_order_task.selection__project_task__state_sync_direction__both
+msgid "Both Tasks"
+msgstr "Beide Aufgaben"
+
+#. module: sale_order_task
+#: model:ir.model.fields,help:sale_order_task.field_project_task__state_sync_direction
+msgid ""
+"Chooses which task is allowed to set and synchronize the stage and status of"
+" the task. \"No Synchronization\" means both tasks have their own stage and "
+"status."
+msgstr "Wählt aus, welche Aufgabe den Status und die Phase der Aufgabe festlegen und synchronisieren darf."
+"\"Keine Synchronisierung\" bedeutet, dass beide Aufgaben ihren eigenen Status und Phase haben."
+
+#. module: sale_order_task
+#: model:ir.model,website_form_label:sale_order_task.model_project_task
+msgid "Create a Task"
+msgstr "Eine Aufgabe erstellen"
+
+#. module: sale_order_task
+#: model:ir.model.fields,field_description:sale_order_task.field_product_product__service_tracking
+#: model:ir.model.fields,field_description:sale_order_task.field_product_template__service_tracking
+msgid "Create on Order"
+msgstr "Bei Auftrag erstellen"
+
+#. module: sale_order_task
+#: model:ir.model.fields,field_description:sale_order_task.field_project_task_type_link__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: sale_order_task
+#: model:ir.model.fields,field_description:sale_order_task.field_project_task_type_link__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: sale_order_task
+#: model:ir.model.fields,field_description:sale_order_task.field_product_template__display_name
+#: model:ir.model.fields,field_description:sale_order_task.field_project_project__display_name
+#: model:ir.model.fields,field_description:sale_order_task.field_project_task__display_name
+#: model:ir.model.fields,field_description:sale_order_task.field_project_task_type_link__display_name
+#: model:ir.model.fields,field_description:sale_order_task.field_sale_order_line__display_name
+msgid "Display Name"
+msgstr "Anzeigename"
+
+#. module: sale_order_task
+#: model:ir.model.fields,field_description:sale_order_task.field_project_task_type_link__first_stage_id
+msgid "First Linked Stage"
+msgstr "Erste verknüpfte Phase"
+
+#. module: sale_order_task
+#: model:ir.model.fields,field_description:sale_order_task.field_project_task_type_link__first_stage_project_ids
+msgid "First Stage Projects"
+msgstr "Projekte der ersten Phase"
+
+#. module: sale_order_task
+#: model:ir.model.fields,field_description:sale_order_task.field_product_template__id
+#: model:ir.model.fields,field_description:sale_order_task.field_project_project__id
+#: model:ir.model.fields,field_description:sale_order_task.field_project_task__id
+#: model:ir.model.fields,field_description:sale_order_task.field_project_task_type_link__id
+#: model:ir.model.fields,field_description:sale_order_task.field_sale_order_line__id
+msgid "ID"
+msgstr ""
+
+#. module: sale_order_task
+#: model:ir.model.fields,field_description:sale_order_task.field_project_task__is_mirror
+msgid "Is Mirror"
+msgstr ""
+
+#. module: sale_order_task
+#: model:ir.model.fields,field_description:sale_order_task.field_project_task_type_link__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: sale_order_task
+#: model:ir.model.fields,field_description:sale_order_task.field_project_task_type_link__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: sale_order_task
+#: model:ir.actions.act_window,name:sale_order_task.open_project_task_type_link_list_action
+#: model:ir.ui.menu,name:sale_order_task.menu_project_config_project_task_type_link
+#: model_terms:ir.ui.view,arch_db:sale_order_task.project_task_type_link_list
+msgid "Link Mirror Task Stages"
+msgstr "Verknüpfte Spiegelaufgaben-Phasen"
+
+#. module: sale_order_task
+#: model_terms:ir.ui.view,arch_db:sale_order_task.product_template_form_view_sale_project_inherit
+msgid "Merge Project Template"
+msgstr "Einzufügende Projektvorlage"
+
+#. module: sale_order_task
+#: model:ir.model.fields,field_description:sale_order_task.field_product_product__so_task_template_id
+#: model:ir.model.fields,field_description:sale_order_task.field_product_template__so_task_template_id
+#: model_terms:ir.ui.view,arch_db:sale_order_task.product_template_form_view_sale_project_inherit
+msgid "Merge Task Template"
+msgstr "Einzufügende Aufgabenvorlage"
+
+#. module: sale_order_task
+#: model:ir.model.fields.selection,name:sale_order_task.selection__product_template__service_tracking__so_project_task_templates
+msgid "Merge Task/Project"
+msgstr "Einzufügende Aufgabe/Projekt"
+
+#. module: sale_order_task
+#: model:ir.model.fields,field_description:sale_order_task.field_project_task__mirror_project_id
+msgid "Mirror Project"
+msgstr "Spiegelprojekt"
+
+#. module: sale_order_task
+#: model:ir.model.fields,field_description:sale_order_task.field_project_task__mirror_task_id
+#: model:ir.model.fields.selection,name:sale_order_task.selection__project_task__state_sync_direction__mirror
+msgid "Mirror Task"
+msgstr "Spiegelaufgabe"
+
+#. module: sale_order_task
+#: model_terms:ir.ui.view,arch_db:sale_order_task.product_template_form_view_sale_project_inherit
+msgid "No Project Template"
+msgstr "Keine Projektvorlage"
+
+#. module: sale_order_task
+#: model:ir.model.fields.selection,name:sale_order_task.selection__project_task__state_sync_direction__none
+msgid "No Synchronization"
+msgstr "Keine Synchronisierung"
+
+#. module: sale_order_task
+#: model_terms:ir.ui.view,arch_db:sale_order_task.product_template_form_view_sale_project_inherit
+msgid "No Task Template"
+msgstr "Keine Aufgabenvorlage"
+
+#. module: sale_order_task
+#: model:ir.model.fields.selection,name:sale_order_task.selection__project_task__state_sync_direction__original
+msgid "Original Task"
+msgstr "Ursprüngliche Aufgabe"
+
+#. module: sale_order_task
+#: model:ir.model,name:sale_order_task.model_product_template
+msgid "Product"
+msgstr "Produkt"
+
+#. module: sale_order_task
+#: model:ir.model,name:sale_order_task.model_project_project
+msgid "Project"
+msgstr "Projekt"
+
+#. module: sale_order_task
+#: model:ir.model.fields,help:sale_order_task.field_project_task_type_link__second_stage_project_ids
+msgid ""
+"Projects in which this stage is present. If you follow a similar workflow in"
+" several projects, you can share this stage among them and get consolidated "
+"information this way."
+msgstr ""
+
+#. module: sale_order_task
+#: model:ir.model,name:sale_order_task.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Verkaufsauftragszeile"
+
+#. module: sale_order_task
+#: model:ir.model.fields,field_description:sale_order_task.field_project_task_type_link__second_stage_id
+msgid "Second Linked Stage"
+msgstr "Zweite verknüpfte Phase"
+
+#. module: sale_order_task
+#: model:ir.model.fields,field_description:sale_order_task.field_project_task_type_link__second_stage_project_ids
+msgid "Second Stage Projects"
+msgstr "Projekte der zweiten Phase"
+
+#. module: sale_order_task
+#: model:ir.model.fields,field_description:sale_order_task.field_project_task_type_link__sequence
+msgid "Sequence"
+msgstr "Sequenz"
+
+#. module: sale_order_task
+#: model:ir.model.fields,field_description:sale_order_task.field_project_task__state_change_permission
+msgid "State Change Permission"
+msgstr ""
+
+#. module: sale_order_task
+#: model:ir.model.fields,field_description:sale_order_task.field_project_task__state_sync_direction
+msgid "Status Sync"
+msgstr "Status Synchronisation"
+
+#. module: sale_order_task
+#: model:ir.model,name:sale_order_task.model_project_task
+msgid "Task"
+msgstr "Aufgabe"
+
+#. module: sale_order_task
+#: model:ir.model.fields,help:sale_order_task.field_project_task__display_name
+msgid ""
+"Use these keywords in the title to set new tasks:\n"
+"\n"
+"        30h Allocate 30 hours to the task\n"
+"        #tags Set tags on the task\n"
+"        @user Assign the task to a user\n"
+"        ! Set the task a medium priority\n"
+"        !! Set the task a high priority\n"
+"        !!! Set the task a urgent priority\n"
+"\n"
+"        Make sure to use the right format and order e.g. Improve the configuration screen 5h #feature #v16 @Mitchell !"
+msgstr ""
+"Verwenden Sie diese Schlagwörter im Titel, um neue Aufgaben zu erstellen:\n"
+"\n"
+"        30 St. Der Aufgabe 30 Stunden zuteilen \n"
+"        #Stichwörter Stichwörter für Aufgabe festlegen \n"
+"        @Benutzer Die Aufgabe einem Benutzer zuweisen \n"
+"        !Aufgabe als mittlere Priorität einstellen \n"
+"        !! Aufgabe als höchste Priorität einstellen \n"
+"        !!! Aufgabe als dringende Priorität einstellen \n"
+"\n"
+"        Stellen Sie sicher, dass Sie das richtige Format und die richtige Reihenfolge verwenden, z. B. Verbessern Sie den Konfigurationsbildschirm 5 St. #Funktion #v16 @Mitchell!"
+
+#. module: sale_order_task
+#: model:ir.model.fields,field_description:sale_order_task.field_project_task_type_link__used_stage_ids
+msgid "Used Stage"
+msgstr ""
+
+#. module: sale_order_task
+#. odoo-python
+#: code:addons/sale_order_task/models/project_task.py:0
+msgid ""
+"You do not have the permission to change the stage and status of this task."
+msgstr ""
+"Sie haben keine Berechtigung, den Status und die Phase dieser Aufgabe zu ändern."
+
+#. module: sale_order_task
+#: model:ir.ui.menu,name:sale_order_task.menu_project_config_project
+msgid "menu_project_config_project"
+msgstr ""
+
+#. module: sale_order_task
+#: model:ir.model,name:sale_order_task.model_project_task_type_link
+msgid "project.task.type.link"
+msgstr ""
