@@ -8,7 +8,7 @@ class ProjectTaskTypeLink(models.Model):
     _name = "project.task.type.link"
     _description = "Project Task Type Link"
 
-    sequence = fields.Integer("Sequence")
+    sequence = fields.Integer()
     first_stage_id = fields.Many2one(
         "project.task.type", "First Linked Stage", required=True
     )
@@ -36,8 +36,8 @@ class ProjectTaskTypeLink(models.Model):
         for rec in self:
             if rec.first_stage_id:
                 rec.first_stage_project_ids = rec.first_stage_id.project_ids.filtered(
-                    lambda p: (
-                        not p.company_id or p.company_id in rec.env.user.company_ids
+                    lambda p, companies=rec.env.user.company_ids: (
+                        not p.company_id or p.company_id in companies
                     )
                 )
             else:
@@ -48,8 +48,8 @@ class ProjectTaskTypeLink(models.Model):
         for rec in self:
             if rec.second_stage_id:
                 rec.second_stage_project_ids = rec.second_stage_id.project_ids.filtered(
-                    lambda p: (
-                        not p.company_id or p.company_id in rec.env.user.company_ids
+                    lambda p, companies=rec.env.user.company_ids: (
+                        not p.company_id or p.company_id in companies
                     )
                 )
             else:
@@ -57,6 +57,8 @@ class ProjectTaskTypeLink(models.Model):
 
     @api.depends("first_stage_id", "second_stage_id")
     def _compute_used_stage_ids(self):
+        # All links are needed to know which stages are already used
+        # pylint: disable=no-search-all
         used_stage_ids = (
             self.env["project.task.type.link"]
             .search([])
@@ -70,4 +72,6 @@ class ProjectTaskTypeLink(models.Model):
     def _check_stages(self):
         for rec in self:
             if rec.first_stage_id == rec.second_stage_id:
-                raise ValidationError("Stages cannot be linked to themselves.")
+                raise ValidationError(
+                    self.env._("Stages cannot be linked to themselves.")
+                )

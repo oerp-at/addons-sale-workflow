@@ -20,15 +20,19 @@ class SaleOrderLine(models.Model):
             so_ids = service_template_lines.mapped("order_id")
             for so in so_ids:
                 project_id = so.project_id
-                # If there already is a project for the sale order, we exclude those tasks when mirroring to avoid duplicates
-                # Especially important for sale_order_type_project, where we create a project and its mirror tasks
+                # If there already is a project for the sale order, we exclude those
+                # tasks when mirroring to avoid duplicates
+                # Especially important for sale_order_type_project, where we create a
+                # project and its mirror tasks
                 # before all the sale order lines
                 exclude_mirror_task_ids = project_id.task_ids
 
                 project_template_so_lines = self._get_project_template_so_lines(so)
                 used_project_template_ids = []
-                # If there is a project already, we merge the tasks of the project template into that project, otherwise
-                # we create a project first if there is a project template line and then use that one for merging
+                # If there is a project already, we merge the tasks of the project
+                # template into that project, otherwise
+                # we create a project first if there is a project template line and then
+                # use that one for merging
                 for sol in project_template_so_lines:
                     if not project_id:
                         project_id = sol.with_context(

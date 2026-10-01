@@ -433,7 +433,8 @@ class TestSaleOrderTask(TransactionCase):
             new_project.copy()
 
     def test_duplicate_mirror_project_is_blocked(self):
-        """Duplicating a project that contains mirror tasks (is_mirror=True) must raise UserError."""
+        """Duplicating a project that contains mirror tasks (is_mirror=True)
+        must raise UserError."""
         fixture = self._setup_templates_and_link_stages()
         mirror_project = fixture["mirror_project"]
 

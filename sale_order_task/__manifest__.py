@@ -3,7 +3,8 @@
 # noinspection PyStatementEffect
 {
     "name": "Sale Order Task",
-    "summary": "Configure Task Templates that will be created in the sale order project",
+    "summary": "Configure Task Templates that will be created in the sale order "
+    "project",
     "author": "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/sale-workflow",
     "category": "Sales Management",

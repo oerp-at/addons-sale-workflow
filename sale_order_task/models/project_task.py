@@ -85,14 +85,16 @@ class ProjectTask(models.Model):
             ("both", "Both Tasks"),
         ],
         default="none",
-        help="Chooses which task is allowed to set and synchronize the stage and status of the task. "
+        help="Chooses which task is allowed to set and synchronize the stage and "
+        "status of the task. "
         '"No Synchronization" means both tasks have their own stage and status.',
     )
     state_change_permission = fields.Boolean(compute="_compute_state_change_permission")
 
     def write(self, vals):
         if self.env.context.get("ignore_history_divergence"):
-            # the write function of project.task calls handle_history_divergence and throws an error, so we bypass it
+            # the write function of project.task calls handle_history_divergence and
+            # throws an error, so we bypass it
             return super(
                 models.Model, self.with_context(ignore_history_divergence=False)
             ).write(vals)
@@ -108,14 +110,16 @@ class ProjectTask(models.Model):
                 ):
                     raise ValidationError(
                         self.env._(
-                            "You do not have the permission to change the stage and status of this task."
+                            "You do not have the permission to change the stage and "
+                            "status of this task."
                         )
                     )
 
         res = super().write(vals)
         for task in self:
             if task.mirror_task_id and not self.env.context.get("is_mirror_write"):
-                # Some fields shouldn't be mirrored and for description we have to do some special handling
+                # Some fields shouldn't be mirrored and for description we have to do
+                # some special handling
                 mirror_vals = self._filter_out_non_mirrorable_vals(vals.copy())
                 description = mirror_vals.pop("description", None)
 
@@ -146,14 +150,17 @@ class ProjectTask(models.Model):
                         mirror_vals.pop("stage_id", None)
 
                 if mirror_vals:
-                    # With context is_mirror_write, so we don't fall into an endless write loop
+                    # With context is_mirror_write, so we don't fall into an endless
+                    # write loop
                     task.mirror_task_id.with_context(is_mirror_write=True).write(
                         mirror_vals
                     )
 
                 if description:
-                    # the write function of project.task calls handle_history_divergence and throws an error,
-                    # so we call a separate write with only the description and bypass it
+                    # the write function of project.task calls handle_history_divergence
+                    # and throws an error,
+                    # so we call a separate write with only the description and bypass
+                    # it
                     task.mirror_task_id.with_context(
                         ignore_history_divergence=True
                     ).write({"description": description})
@@ -163,7 +170,7 @@ class ProjectTask(models.Model):
         if default is None:
             default = {}
         vals_list = super().copy_data(default=default)
-        for task, vals in zip(self, vals_list):
+        for task, vals in zip(self, vals_list, strict=True):
             if not default.get("mirror_project_id"):
                 vals["mirror_project_id"] = task.mirror_project_id.id
             if self.env.context.get("mirror_task_copy"):
@@ -202,7 +209,10 @@ class ProjectTask(models.Model):
         return vals
 
     def map_copied_tasks(self, new_project, mirror_copy=False):
-        """Corrects some values on copied subtasks (otherwise subtasks are assigned to the wrong project for example)"""
+        """Correct some values on copied subtasks.
+
+        Otherwise subtasks are e.g. assigned to the wrong project.
+        """
         vals = {"project_id": new_project.id}
         if mirror_copy:
             vals["sale_order_id"] = False

@@ -28,9 +28,7 @@ class ProjectProject(models.Model):
                 return False
             if _has_mirrored_ancestor(task):
                 return False
-            if exclude_task_ids and task in exclude_task_ids:
-                return False
-            return True
+            return not (exclude_task_ids and task in exclude_task_ids)
 
         task_ids = self.task_ids.filtered(_needs_mirror)
         if not task_ids:
@@ -42,7 +40,7 @@ class ProjectProject(models.Model):
                 "is_mirror": True,
             }
         )
-        for original, copy in zip(task_ids, mirror_task_ids):
+        for original, copy in zip(task_ids, mirror_task_ids, strict=True):
             copy.with_context(is_mirror_write=True).write(
                 {
                     "name": original.name,
@@ -79,15 +77,18 @@ class ProjectProject(models.Model):
         return project.with_env(self.env)
 
     def copy(self, default=None):
-        # Block plain duplication of projects that participate in mirroring; the relationship
-        # cannot be reconstructed safely. Template instantiation and template-to-template
+        # Block plain duplication of projects that participate in mirroring; the
+        # relationship
+        # cannot be reconstructed safely. Template instantiation and template-to-
+        # template
         # duplication are exempt.
         if not self.env.context.get("copy_from_template"):
             for project in self:
                 if project.is_template:
                     continue
                 # Iterate in Python because `mirror_project_id` / `mirror_task_id` are
-                # company_dependent JSONB fields and can't be filtered via a plain domain.
+                # company_dependent JSONB fields and can't be filtered via a plain
+                # domain.
                 tasks = (
                     self.env["project.task"]
                     .with_context(active_test=False)
@@ -100,9 +101,11 @@ class ProjectProject(models.Model):
                 if any(t.mirror_project_id or t.is_mirror for t in tasks):
                     raise UserError(
                         self.env._(
-                            "This project contains mirrored tasks and cannot be duplicated. "
+                            "This project contains mirrored tasks and cannot be "
+                            "duplicated. "
                             "Remove the mirror configuration on its tasks first, "
-                            "or create a new project from the underlying template instead."
+                            "or create a new project from the underlying template "
+                            "instead."
                         )
                     )
         # ``documents_project.copy`` always duplicates the template folder while
