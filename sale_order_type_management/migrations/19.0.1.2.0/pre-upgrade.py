@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
 # Copyright 2025, Weboffice IT-Service und Marketing GmbH & Co KG
+
 
 def migrate(cr, version):
     cr.execute("""

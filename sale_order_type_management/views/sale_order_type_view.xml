@@ -1,31 +1,36 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!-- Copyright 2026, Weboffice IT-Service und Marketing GmbH & Co KG -->
 <odoo>
     <record id="sot_sale_order_type_form_view_inherit" model="ir.ui.view">
-        <field name="name">sale.order.type.form.view.inherit.sale_order_type_management</field>
+        <field
+            name="name"
+        >sale.order.type.form.view.inherit.sale_order_type_management</field>
         <field name="model">sale.order.type</field>
         <field name="inherit_id" ref="sale_order_type.sot_sale_order_type_form_view" />
         <field name="arch" type="xml">
             <field name="route_ids" position="replace">
-                <field name="template_ids" widget="many2many_tags"/>
-                <field name="default_template_id" domain="[('id', 'in', available_template_ids)]"/>
-                <field name="migration_order_type_ids" widget="many2many_tags"/>
+                <field name="template_ids" widget="many2many_tags" />
+                <field
+                    name="default_template_id"
+                    domain="[('id', 'in', available_template_ids)]"
+                />
+                <field name="migration_order_type_ids" widget="many2many_tags" />
             </field>
             <field name="description" position="replace">
                 <notebook>
                     <page string="Description" name="page_description">
-                        <field name="description" nolabel="1"/>
+                        <field name="description" nolabel="1" />
                     </page>
                     <page string="Routes" name="page_routes">
-                        <field name="route_ids" groups="stock.group_adv_location"/>
+                        <field name="route_ids" groups="stock.group_adv_location" />
                     </page>
                     <page string="Workflow" name="page_workflow">
                         <group id="group_workflow_general">
                             <group string="Options" id="group_workflow_options">
-                                <field name="no_delivery" widget="boolean_toggle"/>
+                                <field name="no_delivery" widget="boolean_toggle" />
                             </group>
                             <group string="Invoicing" id="group_workflow_invoicing">
-                                <field name="no_invoice" widget="boolean_toggle"/>
+                                <field name="no_invoice" widget="boolean_toggle" />
                             </group>
                         </group>
                     </page>
