@@ -5,18 +5,18 @@
 {
     "name": "Sale Exception",
     "summary": "Custom exceptions on sale order",
-    "version": "19.0.1.0.1",
+    "version": "20.0.1.0.0",
     "category": "Generic Modules/Sale",
     "author": "Akretion, Sodexis, Camptocamp, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/sale-workflow",
     "depends": ["sale", "base_exception"],
     "license": "AGPL-3",
     "data": [
-        "security/ir.model.access.csv",
         "data/sale_exception_data.xml",
         "wizard/sale_exception_confirm_view.xml",
         "views/sale_view.xml",
         "views/res_config_settings.xml",
+        "security/ir.access.csv",
     ],
     "demo": ["demo/sale_exception_demo.xml"],
 }
