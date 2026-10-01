@@ -1,5 +1,6 @@
 # Copyright 2026, Weboffice IT-Service und Marketing GmbH & Co KG
 
+from odoo import fields
 from odoo.exceptions import UserError, ValidationError
 from odoo.fields import Command
 from odoo.tests import tagged
@@ -607,3 +608,31 @@ class TestSaleOrderTask(TransactionCase):
         # The template is untouched.
         self.assertEqual(subtask.depend_on_ids, other_task)
         self.assertEqual(other_task.dependent_ids, subtask)
+
+    def test_mirror_copy_keeps_dates(self):
+        """Deadline and (with project_enterprise) start date are copy=False, but the
+        mirror task must start with the dates of its original."""
+        mirror_project = self.env["project.project"].create({"name": "Mirror"})
+        project = self.env["project.project"].create({"name": "Original"})
+        task_model = self.env["project.task"]
+        dates = {"date_deadline": "2026-10-20 16:00:00"}
+        if "planned_date_begin" in task_model._fields:
+            dates["planned_date_begin"] = "2026-10-20 08:00:00"
+        original = task_model.create(
+            dict(
+                dates,
+                name="Dated Task",
+                project_id=project.id,
+                mirror_project_id=mirror_project.id,
+            )
+        )
+
+        project.create_mirror_tasks()
+
+        mirror = original.mirror_task_id
+        self.assertEqual(mirror.project_id, mirror_project)
+        for fname, value in dates.items():
+            self.assertEqual(mirror[fname], fields.Datetime.to_datetime(value))
+        # The original is left untouched
+        for fname, value in dates.items():
+            self.assertEqual(original[fname], fields.Datetime.to_datetime(value))

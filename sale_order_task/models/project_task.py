@@ -178,6 +178,12 @@ class ProjectTask(models.Model):
                 vals["sale_order_id"] = False
                 vals["mirror_project_id"] = task.project_id.id
                 vals["mirror_task_id"] = task.id
+                # The dates are copy=False, but a mirror represents the same work
+                # in another project (later changes are synced by write()).
+                # planned_date_begin only exists with project_enterprise.
+                for fname in ("planned_date_begin", "date_deadline"):
+                    if fname in task._fields and fname not in default:
+                        vals[fname] = task[fname]
                 stage_id = vals.get("stage_id")
                 if stage_id:
                     link_id = self.env["project.task.type.link"].search(
