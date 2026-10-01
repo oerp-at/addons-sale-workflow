@@ -70,7 +70,9 @@ class SaleOrder(models.Model):
         sale_order_id = self.copy(
             {
                 "type_id": self.migration_order_type_id.id,
-                "sale_order_template_id": self.migration_order_type_id.default_template_id.id,
+                "sale_order_template_id": (
+                    self.migration_order_type_id.default_template_id.id
+                ),
                 "migration_order_type_id": False,
                 "source_sale_order_id": self.id,
             }

@@ -17,11 +17,13 @@ class SaleOrderTypology(models.Model):
         string="Available Sale Order Templates",
         comodel_name="sale.order.template",
         domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",
-        help="The templates which are available for this sale order type. If none are selected, all templates are available.",
+        help=(
+            "The templates which are available for this sale order type. If none are "
+            "selected, all templates are available."
+        ),
     )
 
     default_template_id = fields.Many2one(
-        string="Default Template",
         comodel_name="sale.order.template",
         help="The default template for the sale order if this type is selected",
     )
