@@ -1,20 +1,23 @@
-# -*- coding: utf-8 -*-
 # Copyright 2026, Weboffice IT-Service und Marketing GmbH & Co KG
 
-from odoo import models, fields, Command
+from odoo import Command, fields, models
 
 
 class ProjectTask(models.Model):
     _inherit = "project.task"
 
-    optional_task = fields.Boolean(help='Tasks marked as optional will not be created in Sale Order Type Project unless '
-                                        'explicitly included')
+    optional_task = fields.Boolean(
+        help="Tasks marked as optional will not be created in Sale Order Type Project unless "
+        "explicitly included"
+    )
 
     # Back-reference to the template task a task was instantiated from. Used to
     # reconnect dependencies of optional tasks that are merged into a project
     # after it was already created (the template task's dependency neighbours
     # are no longer part of the same copy operation).
-    source_template_task_id = fields.Many2one('project.task', copy=False, index='btree_not_null')
+    source_template_task_id = fields.Many2one(
+        "project.task", copy=False, index="btree_not_null"
+    )
 
     def copy_data(self, default=None):
         vals_list = super().copy_data(default=default)
@@ -24,7 +27,7 @@ class ProjectTask(models.Model):
             # task - so a plain project/task duplication doesn't get spurious
             # references.
             if task.project_id.is_template or task.has_template_ancestor:
-                vals['source_template_task_id'] = task.id
+                vals["source_template_task_id"] = task.id
         return vals_list
 
     def _reconstruct_optional_template_dependencies(self):

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2026, Weboffice IT-Service und Marketing GmbH & Co KG
 
 """Restore the values stashed by ``pre-migration.py`` into the new
@@ -58,7 +57,9 @@ def migrate(cr, version):
             _logger.warning(
                 "sale.order.type id=%s: multiple per-company project "
                 "templates found (%s); kept project.project id=%s.",
-                sot_id, clean, chosen,
+                sot_id,
+                clean,
+                chosen,
             )
         updates.append((int(chosen), sot_id))
 
@@ -69,7 +70,8 @@ def migrate(cr, version):
         )
         _logger.info(
             "sale.order.type.project_template_id: restored %s values from "
-            "the legacy JSONB column.", len(updates),
+            "the legacy JSONB column.",
+            len(updates),
         )
 
     cr.execute("ALTER TABLE sale_order_type DROP COLUMN project_template_id_legacy")
