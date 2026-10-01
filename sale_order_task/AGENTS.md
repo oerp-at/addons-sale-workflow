@@ -78,8 +78,9 @@ coexist.
 
 ## Views & Menus
 
-- `view_task_form2_inherit`, `view_task_kanban_inherit` — add mirror fields and lock
-  stage/state via `state_change_permission`.
+- `view_task_form2_inherit`, `view_task_kanban_inherit` (inherits the task card view
+  `project.view_task_card` since 20.0) — add mirror fields and lock stage/state via
+  `state_change_permission`.
 - `project_task_type_link_list` — editable list view for stage links.
 - `product_template_form_view_sale_project_inherit` — adds the project/task template
   fields under `service_tracking`.
@@ -97,8 +98,8 @@ sale_order_task/
     project_task_type_link.py # stage pair model
     product_template.py       # service_tracking + so_task_template_id
     sale_order_line.py        # _timesheet_service_generation
-  views/                      # form/list/kanban inherits + menu
-  security/ir.model.access.csv
+  views/                      # form/list/card inherits + menu
+  security/ir.access.csv
   tests/
     test_sale_order_task.py       # merge + mirror + dependency stripping
     test_project_task_type_link.py
@@ -122,3 +123,11 @@ sale_order_task/
   (ancestor-company template visibility via record-rule patch + `_check_company_domain`,
   and project company realignment on confirmation) lives in `woa_himmelblau_project`,
   not here.
+- 20.0: every new project gets four default stages (New, In Progress, Done, Cancelled)
+  through `project.project._default_type_ids`. Tests that rely on their own stage order
+  create projects with `type_ids: [Command.clear()]`; in production, link the stages of
+  new template/mirror projects explicitly.
+- 20.0: kanban cards live in a separate view (`project.view_task_card`); xpaths on
+  `stage_id`/`state` must target the card, not `project.view_task_kanban`.
+- 20.0: the 19.0 filter `p.company_id in companies or p.company_id == False` dropped
+  projects without company; use `not p.company_id or p.company_id in companies`.
