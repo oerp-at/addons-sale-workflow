@@ -24,7 +24,11 @@ jobs:
               if [ -f ${reqfile} ] ; then
                   result=0
                   # reject non-comment lines that contain a / (i.e. URLs, relative paths)
-                  grep "^[^#].*/" ${reqfile} || result=$?
+                  # oerp-at fork: allow merged 20.0 addons of sibling oerp-at forks,
+                  # they are not released on PyPI (keep on copier updates)
+                  grep "^[^#].*/" ${reqfile} \
+                      | grep -vE "@ git\+https://github\.com/oerp-at/[A-Za-z0-9_.-]+\.git@20\.0#subdirectory=[a-z0-9_]+$" \
+                      || result=$?
                   if [ $result -eq 0 ] ; then
                       echo "Unreleased dependencies found in ${reqfile}."
                       exit 1
