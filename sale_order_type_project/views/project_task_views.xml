@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2026, Weboffice IT-Service und Marketing GmbH & Co KG -->
+<odoo>
+    <record id="view_sale_project_inherit_form_inherit" model="ir.ui.view">
+        <field name="name">project.task.form.inherit.sale_order_type_project</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="sale_project.view_sale_project_inherit_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='sale_order_state']" position="after">
+                <field name="optional_task" invisible="not has_project_template" />
+            </xpath>
+        </field>
+    </record>
+</odoo>
