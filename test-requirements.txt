@@ -1,0 +1,1 @@
+odoo-addon-base_exception @ git+https://github.com/oerp-at/addons-server-tools.git@20.0#subdirectory=base_exception
