@@ -294,8 +294,13 @@ class TestSaleOrderTask(TransactionCase):
         sale_order = data["sale_order"]
 
         self.assertEqual(len(sale_order.project_ids), 1)
-        self.assertEqual(len(sale_order.tasks_ids), 5)
-        self.assertEqual(len(sale_order.project_id.task_ids), 5)
+        # Count the tasks of the order lines only: a default order type with a
+        # project template (sale_order_type_project) adds its own tasks to the
+        # same project, e.g. on a customer database.
+        self.assertEqual(len(sale_order.tasks_ids.filtered("sale_line_id")), 5)
+        self.assertEqual(
+            len(sale_order.project_id.task_ids.filtered("sale_line_id")), 5
+        )
         self.assertEqual(len(data["mirror_project"].task_ids), 2)
 
         self.assertTrue(data["original_task"])
