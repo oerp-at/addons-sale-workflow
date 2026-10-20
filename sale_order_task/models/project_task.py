@@ -74,7 +74,10 @@ class ProjectTask(models.Model):
                 task.sale_order_id = sale_order
 
     mirror_project_id = fields.Many2one("project.project", company_dependent=True)
-    mirror_task_id = fields.Many2one("project.task", company_dependent=True)
+    # Not company_dependent: a task has exactly one counterpart. Read in another
+    # active company than the task's one, a company_dependent link was empty and
+    # the sync was silently skipped.
+    mirror_task_id = fields.Many2one("project.task", copy=False, index="btree_not_null")
     is_mirror = fields.Boolean()
     state_sync_direction = fields.Selection(
         string="Status Sync",
@@ -90,6 +93,21 @@ class ProjectTask(models.Model):
         '"No Synchronization" means both tasks have their own stage and status.',
     )
     state_change_permission = fields.Boolean(compute="_compute_state_change_permission")
+
+    def _get_mirror_project(self):
+        """Mirror project, read in the task's own company first.
+
+        ``mirror_project_id`` stays company_dependent (a shared template task
+        mirrors into a different project per company), so a plain read uses the
+        user's active company and misses a link stored for the task's company.
+        """
+        self.ensure_one()
+        task = self.sudo()
+        project = (
+            task.with_company(self.company_id).mirror_project_id
+            or task.mirror_project_id
+        )
+        return project.with_env(self.env)
 
     def write(self, vals):
         if self.env.context.get("ignore_history_divergence"):

@@ -18,13 +18,13 @@ class ProjectProject(models.Model):
         def _has_mirrored_ancestor(task):
             parent = task.parent_id
             while parent:
-                if parent.mirror_project_id:
+                if parent._get_mirror_project():
                     return True
                 parent = parent.parent_id
             return False
 
         def _needs_mirror(task):
-            if not task.mirror_project_id or task.mirror_task_id:
+            if task.mirror_task_id or not task._get_mirror_project():
                 return False
             if _has_mirrored_ancestor(task):
                 return False
@@ -44,7 +44,7 @@ class ProjectProject(models.Model):
             copy.with_context(is_mirror_write=True).write(
                 {
                     "name": original.name,
-                    "project_id": original.mirror_project_id.id,
+                    "project_id": original._get_mirror_project().id,
                     "mirror_project_id": original.project_id.id,
                     "mirror_task_id": original.id,
                     "parent_id": original.parent_id.mirror_task_id.id
@@ -86,8 +86,8 @@ class ProjectProject(models.Model):
             for project in self:
                 if project.is_template:
                     continue
-                # Iterate in Python because `mirror_project_id` / `mirror_task_id` are
-                # company_dependent JSONB fields and can't be filtered via a plain
+                # Iterate in Python because `mirror_project_id` is a
+                # company_dependent JSONB field and can't be filtered via a plain
                 # domain.
                 tasks = (
                     self.env["project.task"]
@@ -98,7 +98,10 @@ class ProjectProject(models.Model):
                         ]
                     )
                 )
-                if any(t.mirror_project_id or t.is_mirror for t in tasks):
+                if any(
+                    t.is_mirror or t.mirror_task_id or t._get_mirror_project()
+                    for t in tasks
+                ):
                     raise UserError(
                         self.env._(
                             "This project contains mirrored tasks and cannot be "
