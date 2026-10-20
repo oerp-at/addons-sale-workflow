@@ -21,9 +21,13 @@
 ## Key Fields & Logic
 
 - `project.task.mirror_project_id` (`company_dependent`) — target project for mirroring;
-  configures the relationship.
-- `project.task.mirror_task_id` (`company_dependent`) — counterpart task, set by
-  `create_mirror_tasks`.
+  configures the relationship. Read it via `_get_mirror_project()` (task's own company
+  first, then the active one).
+- `project.task.mirror_task_id` (plain Many2one, `copy=False`) — counterpart task, set
+  by `create_mirror_tasks`. Was `company_dependent` up to 20.0.1.0.0: with another
+  active company than the task's one the link read empty and the sync was silently
+  skipped. `migrations/20.0.1.0.1/pre-migration.py` converts the JSONB column (value of
+  the task's company, else the only value).
 - `project.task.is_mirror` — `True` on the copy that lives inside the mirror project.
 - `project.task.state_sync_direction` — `none` / `original` / `mirror` / `both`;
   controls who may change stage/state and how it propagates.
@@ -118,9 +122,12 @@ sale_order_task/
 
 ## Known Pitfalls / Notes
 
-- `mirror_project_id` and `mirror_task_id` are `company_dependent=True` and therefore
-  have `copy=False` (Odoo default for `company_dependent`); the `copy_data` override
-  re-populates `mirror_project_id` explicitly when copying.
+- `mirror_project_id` is `company_dependent=True` and therefore has `copy=False` (Odoo
+  default for `company_dependent`); the `copy_data` override re-populates
+  `mirror_project_id` explicitly when copying. A shared template task can mirror into a
+  different project per company, so it stays company_dependent.
+- Never make `mirror_task_id` company_dependent again; sync must not depend on the
+  user's active company (tests `test_sync_with_*company`).
 - `create_mirror_tasks` must remain idempotent — the SO flow calls it after
   `action_create_from_template` has already mirrored part of the project.
 - `default` in `project_task.copy_data` is normalised to a dict because `map_tasks` may
