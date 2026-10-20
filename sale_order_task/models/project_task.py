@@ -170,9 +170,21 @@ class ProjectTask(models.Model):
         if default is None:
             default = {}
         vals_list = super().copy_data(default=default)
+        so_template_project = self.env["project.project"].browse(
+            self.env.context.get("so_task_template_project_id")
+        )
         for task, vals in zip(self, vals_list, strict=True):
             if not default.get("mirror_project_id"):
                 vals["mirror_project_id"] = task.mirror_project_id.id
+            if (
+                so_template_project
+                and vals.get("project_id") == so_template_project.id
+                and vals.get("stage_id") not in so_template_project.type_ids.ids
+            ):
+                # A template task must not bring its template project's stage
+                # into the order project; core create() then falls back to the
+                # first stage of the order project (copy_from_template).
+                vals["stage_id"] = False
             if self.env.context.get("mirror_task_copy"):
                 vals["sale_line_id"] = False
                 vals["sale_order_id"] = False

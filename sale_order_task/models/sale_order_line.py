@@ -74,6 +74,7 @@ class SaleOrderLine(models.Model):
         vals = self._prepare_so_task_template_vals(project)
         task_ids = template_tasks.with_context(
             copy_from_template=True,
+            so_task_template_project_id=project.id,
         ).copy(vals)
         if len(task_ids) == 1:
             self.task_id = task_ids

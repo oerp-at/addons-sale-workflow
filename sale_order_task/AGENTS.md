@@ -44,6 +44,12 @@
 2. Direct template instantiation — `project.project.action_create_from_template()` is
    overridden to call `create_mirror_tasks()` on the new project.
 
+Merged template tasks (and their subtasks) never keep a stage that the order project
+does not have: `_so_task_template_create_task` copies with context
+`so_task_template_project_id`, and `copy_data` then clears `stage_id`, so core
+`create()` falls back to the first stage of the order project. Without this, 20.0 would
+link the template project's own default stage (e.g. "New") into the order project.
+
 After a single task template is merged, `_so_task_template_create_task` calls
 `project.task._drop_external_dependencies()` on the copied tasks (and their subtasks).
 Core's copy keeps the template ids for any dependency whose other end was not part of
@@ -124,6 +130,10 @@ sale_order_task/
 - Mirror writes intentionally skip `project_id`, `parent_id`, `sale_line_id`,
   `sale_order_id`; moving an original task between projects does **not** move its
   mirror.
+- Tests run on customer copies, where `sale_order_type_project` may give the order a
+  default type with a project template. Its tasks land in the same project as the order
+  line tasks, so assertions count `tasks_ids.filtered("sale_line_id")`, not all tasks
+  (Himmelblau: the default type "inhaltliche Vorsorge" adds 4).
 - This module is single-/standard-multi-company only. Branch/multi-company support
   (ancestor-company template visibility via record-rule patch + `_check_company_domain`,
   and project company realignment on confirmation) lives in `woa_himmelblau_project`,
