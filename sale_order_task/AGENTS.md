@@ -44,6 +44,12 @@
 2. Direct template instantiation — `project.project.action_create_from_template()` is
    overridden to call `create_mirror_tasks()` on the new project.
 
+Merged template tasks (and their subtasks) never keep a stage that the order project
+does not have: `_so_task_template_create_task` copies with context
+`so_task_template_project_id`, and `copy_data` then clears `stage_id`, so core
+`create()` falls back to the first stage of the order project. Without this, 20.0 would
+link the template project's own default stage (e.g. "New") into the order project.
+
 After a single task template is merged, `_so_task_template_create_task` calls
 `project.task._drop_external_dependencies()` on the copied tasks (and their subtasks).
 Core's copy keeps the template ids for any dependency whose other end was not part of
