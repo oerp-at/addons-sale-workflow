@@ -24,10 +24,10 @@
   configures the relationship. Read it via `_get_mirror_project()` (task's own company
   first, then the active one).
 - `project.task.mirror_task_id` (plain Many2one, `copy=False`) — counterpart task, set
-  by `create_mirror_tasks`. Was `company_dependent` up to 20.0.1.0.0: with another
-  active company than the task's one the link read empty and the sync was silently
-  skipped. `migrations/20.0.1.0.1/pre-migration.py` converts the JSONB column (value of
-  the task's company, else the only value).
+  by `create_mirror_tasks`. Was `company_dependent` before: with another active company
+  than the task's one the link read empty and the sync was silently skipped. The data
+  conversion (JSONB -> int4) and the repair of diverged pairs run in 19.0 (Himmelblau
+  `sale_order_task` 19.0.2.1.0), so there is no 20.0 migration.
 - `project.task.is_mirror` — `True` on the copy that lives inside the mirror project.
 - `project.task.state_sync_direction` — `none` / `original` / `mirror` / `both`;
   controls who may change stage/state and how it propagates.
