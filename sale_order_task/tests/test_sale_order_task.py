@@ -673,3 +673,75 @@ class TestSaleOrderTask(TransactionCase):
         self.assertEqual(merged.stage_id, target_project._get_default_task_stage())
         # The template keeps its own stage
         self.assertEqual(template_task.stage_id.project_ids, template)
+
+    def _other_company_env(self):
+        """Environment whose active company is a second company of the user."""
+        other_company = self.env["res.company"].create({"name": "Other Company"})
+        self.env.user.company_ids |= other_company
+        return other_company, self.env(
+            context=dict(
+                self.env.context,
+                allowed_company_ids=[other_company.id, self.env.company.id],
+            )
+        )
+
+    def test_sync_with_other_active_company(self):
+        """Working with another active company than the task's one must still
+        sync to the counterpart (mirror_task_id used to be company_dependent)."""
+        company = self.env.company
+        project = self.env["project.project"].create(
+            {"name": "Original", "company_id": company.id}
+        )
+        mirror_project = self.env["project.project"].create(
+            {"name": "Mirror", "company_id": company.id}
+        )
+        original = self.env["project.task"].create(
+            {
+                "name": "Synced Task",
+                "project_id": project.id,
+                "mirror_project_id": mirror_project.id,
+                "state_sync_direction": "both",
+            }
+        )
+        project.create_mirror_tasks()
+        mirror = original.mirror_task_id
+        self.assertTrue(mirror)
+
+        other_company, other_env = self._other_company_env()
+        self.assertNotEqual(original.company_id, other_company)
+        original.with_env(other_env).write({"state": "1_done"})
+        self.assertEqual(mirror.state, "1_done")
+        mirror.with_env(other_env).write({"description": "<p>From mirror</p>"})
+        self.assertIn("From mirror", str(original.description))
+        # The duplication guard does not depend on the active company either
+        with self.assertRaises(UserError):
+            project.with_env(other_env).copy()
+
+    def test_sync_with_mirror_project_in_other_company(self):
+        """Original and mirror in different companies: both directions sync
+        whatever company is active."""
+        other_company, other_env = self._other_company_env()
+        project = self.env["project.project"].create(
+            {"name": "Original", "company_id": self.env.company.id}
+        )
+        mirror_project = self.env["project.project"].create(
+            {"name": "Mirror", "company_id": other_company.id}
+        )
+        original = self.env["project.task"].create(
+            {
+                "name": "Cross Company Task",
+                "project_id": project.id,
+                "mirror_project_id": mirror_project.id,
+                "state_sync_direction": "both",
+            }
+        )
+        project.create_mirror_tasks()
+        mirror = original.mirror_task_id
+        self.assertEqual(mirror.project_id, mirror_project)
+        self.assertEqual(mirror.company_id, other_company)
+        self.assertEqual(mirror.with_env(other_env).mirror_task_id, original)
+
+        mirror.with_env(other_env).write({"state": "1_canceled"})
+        self.assertEqual(original.state, "1_canceled")
+        original.write({"state": "01_in_progress"})
+        self.assertEqual(mirror.state, "01_in_progress")
