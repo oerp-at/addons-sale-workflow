@@ -641,3 +641,35 @@ class TestSaleOrderTask(TransactionCase):
         # The original is left untouched
         for fname, value in dates.items():
             self.assertEqual(original[fname], fields.Datetime.to_datetime(value))
+
+    def test_merge_task_uses_order_project_stage(self):
+        """A merged template task (and its subtask) starts in the first stage of
+        the order project and does not link the template project's stage into it
+        (20.0 gives every new project its own default stages)."""
+        template = self.env["project.project"].create(
+            {"name": "Stage Template", "is_template": True}
+        )
+        template_task = self.env["project.task"].create(
+            {"name": "Template Task", "project_id": template.id}
+        )
+        self.env["project.task"].create(
+            {
+                "name": "Template Subtask",
+                "project_id": template.id,
+                "parent_id": template_task.id,
+            }
+        )
+        self.assertTrue(template_task.stage_id)
+        target_project = self._merge_target_project()
+        target_stages = target_project.type_ids
+        self.assertTrue(target_stages)
+        self.assertNotIn(template_task.stage_id, target_stages)
+
+        self._merge_so(target_project, template_task)
+
+        merged = target_project.with_context(active_test=False).task_ids
+        self.assertEqual(len(merged), 2)
+        self.assertEqual(target_project.type_ids, target_stages)
+        self.assertEqual(merged.stage_id, target_project._get_default_task_stage())
+        # The template keeps its own stage
+        self.assertEqual(template_task.stage_id.project_ids, template)
