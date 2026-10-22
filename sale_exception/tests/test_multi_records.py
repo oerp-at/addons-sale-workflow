@@ -11,6 +11,11 @@ class TestSaleExceptionMultiRecord(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
+        # Only the rules of this test may apply: the database can have more
+        # active sale exception rules (e.g. from other modules).
+        cls.env["exception.rule"].search(
+            [("model", "in", ["sale.order", "sale.order.line"])]
+        ).active = False
         cls.default_pl = cls.env["product.pricelist"].create(
             {
                 "name": "Public Pricelist",
