@@ -10,17 +10,31 @@ class SaleOrder(models.Model):
 
     def _action_confirm(self):
         for order in self.sudo():
-            if order.type_id and order.type_id.project_template_id:
+            if order._get_order_type_project_template():
                 # If a project template is set in the sale order type, we create a
                 # project for the sale order
                 # independent of a sale order line
                 order.with_company(order.company_id)._create_order_type_project()
         return super()._action_confirm()
 
+    def _get_order_type_project_template(self):
+        """Project template the order type creates the order's project from.
+
+        Hook: modules may pick another template for an order (e.g. from an
+        intake); every use of the order type's template goes through here.
+        """
+        self.ensure_one()
+        return self.type_id.project_template_id
+
+    def _get_order_type_optional_tasks(self):
+        """Optional tasks of that template the order type always includes."""
+        self.ensure_one()
+        return self.type_id.optional_task_ids
+
     def _create_order_type_project(self):
         self.ensure_one()
         values = self._order_type_project_values()
-        project_template = self.type_id.project_template_id
+        project_template = self._get_order_type_project_template()
         values["name"] = self._get_so_project_name(values["name"], project_template)
 
         tasks_to_copy = self._handle_tasks_to_copy(project_template)
@@ -87,7 +101,7 @@ class SaleOrder(models.Model):
             "company_id": self.company_id.id,
             "allow_billable": True,
             "reinvoiced_sale_order_id": self.id,
-            "user_id": self.type_id.project_template_id.user_id.id,
+            "user_id": self._get_order_type_project_template().user_id.id,
             "tasks": False,
         }
 
@@ -98,14 +112,14 @@ class SaleOrder(models.Model):
         """Filter out optional tasks except for those defined in the sale order
         type or those that have a sale order line with this task as a template.
         """
-        optional_tasks_to_include = self.type_id.optional_task_ids
+        optional_tasks_to_include = self._get_order_type_optional_tasks()
         # Include optional tasks of individual sale order lines if they have a so task
         # template with the same project template id
+        project_template = self._get_order_type_project_template()
         order_lines = self.order_line.filtered(
             lambda sol: (
                 sol.product_id.service_tracking == "so_project_task_templates"
-                and sol.product_id.so_task_template_id.project_id
-                == self.type_id.project_template_id
+                and sol.product_id.so_task_template_id.project_id == project_template
             )
         )
         optional_tasks_to_include |= order_lines.product_id.mapped(
