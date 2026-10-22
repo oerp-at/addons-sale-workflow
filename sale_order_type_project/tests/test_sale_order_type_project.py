@@ -1,5 +1,7 @@
 # Copyright 2026, Weboffice IT-Service und Marketing GmbH & Co KG
 
+from unittest.mock import patch
+
 from odoo.fields import Command
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
@@ -470,3 +472,57 @@ class TestSaleOrderTypeProject(TransactionCase):
             "default_project_id"
         )
         self.assertEqual(targeted, order.order_type_project_id.id)
+
+    def test_project_template_hook(self):
+        # ``_get_order_type_project_template`` / ``_get_order_type_optional_tasks``
+        # decide the template: a module returning another template than the
+        # order type's gets the project, its tasks and its optional tasks from it.
+        template = self.env["project.project"].create(
+            {"name": "Hook Template", "is_template": True}
+        )
+        mandatory, optional_in, _optional_out = self.env["project.task"].create(
+            [
+                {"name": "Hook Mandatory", "project_id": template.id},
+                {
+                    "name": "Hook Optional In",
+                    "project_id": template.id,
+                    "optional_task": True,
+                },
+                {
+                    "name": "Hook Optional Out",
+                    "project_id": template.id,
+                    "optional_task": True,
+                },
+            ]
+        )
+        sale_order_type = self.env["sale.order.type"].create({"name": "Hook Type"})
+        partner = self.env["res.partner"].create({"name": "Hook Partner"})
+        order = self.env["sale.order"].create(
+            {
+                "name": "Hook SO",
+                "partner_id": partner.id,
+                "type_id": sale_order_type.id,
+            }
+        )
+        order_class = type(order)
+        with (
+            patch.object(
+                order_class,
+                "_get_order_type_project_template",
+                lambda self: template,
+            ),
+            patch.object(
+                order_class,
+                "_get_order_type_optional_tasks",
+                lambda self: optional_in,
+            ),
+        ):
+            order.action_confirm()
+
+        project = order.order_type_project_id
+        self.assertTrue(project)
+        self.assertEqual(order.project_id, project)
+        self.assertEqual(
+            sorted(project.task_ids.mapped("name")),
+            sorted((mandatory | optional_in).mapped("name")),
+        )

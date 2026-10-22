@@ -21,8 +21,9 @@ class SaleOrderLine(models.Model):
         # line in this project, it was
         # already created with the creation of the project, so we filter those out
         so_lines = super()._get_task_template_so_lines(so)
-        if so.type_id.project_template_id:
-            optional_tasks = so.type_id.project_template_id.task_ids.filtered(
+        project_template = so._get_order_type_project_template()
+        if project_template:
+            optional_tasks = project_template.task_ids.filtered(
                 lambda t: t.optional_task
             )
             so_lines = so_lines.filtered(

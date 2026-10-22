@@ -18,6 +18,16 @@ type creates the order project from the template, with optional template tasks.
 - `sale.order.line`: task templates of lines (from `sale_order_task`) go into the same
   project.
 
+## Hooks
+
+- `sale.order._get_order_type_project_template()`: the template the order's project is
+  created from (default: the order type's `project_template_id`). Every use of the
+  template (confirmation, project values, optional tasks of lines, merged line tasks)
+  goes through it, so a module can pick another template per order, e.g. Himmelblau's
+  intake (#13930, `woa_funeral_intake`).
+- `sale.order._get_order_type_optional_tasks()`: optional template tasks always included
+  (default: the order type's `optional_task_ids`).
+
 ## Rules
 
 - Optional template tasks are created only if the order type or an order line asks for
