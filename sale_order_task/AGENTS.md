@@ -142,8 +142,7 @@ sale_order_task/
   line tasks, so assertions count `tasks_ids.filtered("sale_line_id")`, not all tasks.
 - This module is single-/standard-multi-company only. Branch/multi-company support
   (ancestor-company template visibility via record-rule patch + `_check_company_domain`,
-  and project company realignment on confirmation) lives in a customer module, not
-  here.
+  and project company realignment on confirmation) lives in a customer module, not here.
 - 20.0: every new project gets four default stages (New, In Progress, Done, Cancelled)
   through `project.project._default_type_ids`. Tests that rely on their own stage order
   create projects with `type_ids: [Command.clear()]`; in production, link the stages of
