@@ -18,8 +18,8 @@ exceptions cannot be confirmed (blocking rules) or need a confirmation (warnings
 
 ## Pitfalls
 
-- Himmelblau adds its own rules (e.g. CRIF credit check for persons) as data in
-  `woa_himmelblau_sale`; they depend on `is_company` (see `partner_company_manual`).
+- Other modules can add their own rules as data (e.g. a credit check for persons); such
+  rules may depend on `is_company` (see `partner_company_manual`).
 - 20.0: security as `security/ir.access.csv`.
 - `test_multi_records` deactivates all other sale exception rules in `setUpClass`, so
-  database rules (e.g. Himmelblau CRIF) do not add exceptions.
+  rules of other modules do not add exceptions.
