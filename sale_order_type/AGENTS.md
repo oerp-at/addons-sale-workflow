@@ -24,4 +24,4 @@ incoterm, salesperson/team, quotation validity, analytic distribution, routes.
 - 20.0: `BaseCommon` tests run as a basic test user; `TestSaleOrderType` sets
   `_test_user_groups = ()` to keep the admin environment.
 - Quotation validity uses the user's today (`fields.Date.context_today`).
-- Himmelblau builds `sale_order_type_management` and `sale_order_type_project` on top.
+- `sale_order_type_management` and `sale_order_type_project` build on top of it.

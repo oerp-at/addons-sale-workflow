@@ -26,8 +26,8 @@
 - `project.task.mirror_task_id` (plain Many2one, `copy=False`) — counterpart task, set
   by `create_mirror_tasks`. Was `company_dependent` before: with another active company
   than the task's one the link read empty and the sync was silently skipped. The data
-  conversion (JSONB -> int4) and the repair of diverged pairs run in 19.0 (Himmelblau
-  `sale_order_task` 19.0.2.1.0), so there is no 20.0 migration.
+  conversion (JSONB -> int4) and the repair of diverged pairs run in 19.0
+  (`sale_order_task` 19.0.2.1.0), so there is no 20.0 migration.
 - `project.task.is_mirror` — `True` on the copy that lives inside the mirror project.
 - `project.task.state_sync_direction` — `none` / `original` / `mirror` / `both`;
   controls who may change stage/state and how it propagates.
@@ -139,12 +139,10 @@ sale_order_task/
   mirror.
 - Tests run on customer copies, where `sale_order_type_project` may give the order a
   default type with a project template. Its tasks land in the same project as the order
-  line tasks, so assertions count `tasks_ids.filtered("sale_line_id")`, not all tasks
-  (Himmelblau: the default type "inhaltliche Vorsorge" adds 4).
+  line tasks, so assertions count `tasks_ids.filtered("sale_line_id")`, not all tasks.
 - This module is single-/standard-multi-company only. Branch/multi-company support
   (ancestor-company template visibility via record-rule patch + `_check_company_domain`,
-  and project company realignment on confirmation) lives in `woa_himmelblau_project`,
-  not here.
+  and project company realignment on confirmation) lives in a customer module, not here.
 - 20.0: every new project gets four default stages (New, In Progress, Done, Cancelled)
   through `project.project._default_type_ids`. Tests that rely on their own stage order
   create projects with `type_ids: [Command.clear()]`; in production, link the stages of
