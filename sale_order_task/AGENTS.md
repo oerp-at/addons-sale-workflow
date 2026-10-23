@@ -139,8 +139,7 @@ sale_order_task/
   mirror.
 - Tests run on customer copies, where `sale_order_type_project` may give the order a
   default type with a project template. Its tasks land in the same project as the order
-  line tasks, so assertions count `tasks_ids.filtered("sale_line_id")`, not all tasks
-  (Himmelblau: the default type "inhaltliche Vorsorge" adds 4).
+  line tasks, so assertions count `tasks_ids.filtered("sale_line_id")`, not all tasks.
 - This module is single-/standard-multi-company only. Branch/multi-company support
   (ancestor-company template visibility via record-rule patch + `_check_company_domain`,
   and project company realignment on confirmation) lives in a customer module, not
