@@ -90,9 +90,28 @@ coexist.
   in `copy_data` under `mirror_task_copy`). Later date changes propagate like any other
   field. This replaces the 19.0 module `sale_order_task_fsm` (Field Service only;
   `industry_fsm` no longer exists in 20.0).
+- Portal users (project sharing with full access) may write `stage_id`/`state`, but
+  `state_sync_direction`, `is_mirror` and `mirror_task_id` are not in their field list.
+  `write` therefore reads them, searches `project.task.type.link` and writes the
+  counterpart through `self.sudo()`. `sudo()` keeps the uid, so tracking and chatter
+  show the portal user as author (not OdooBot); never switch to
+  `with_user(SUPERUSER_ID)` here. The gate itself is unchanged and holds for portal
+  users too.
+- Project sharing shows the gate like the backend: `state_change_permission` is
+  `compute_sudo=True` and added to `TASK_PORTAL_READABLE_FIELDS`;
+  `project_sharing_project_task_view_form_inherit` makes the header `stage_id` and both
+  `state` widgets `readonly="not state_change_permission"`,
+  `project_sharing_project_task_view_card_inherit` the state widget of the card (20.0:
+  the kanban renders the card view `project_sharing_project_task_view_card`). Without it
+  a portal user picked a stage, the server refused the save and the form showed no
+  message (only `RPC_ERROR` in the console). Kanban drag and drop between stage columns
+  is not locked in the UI; the server still refuses it.
 
 ## Views & Menus
 
+- `project_sharing_project_task_view_form_inherit`,
+  `project_sharing_project_task_view_card_inherit` — the same stage/state lock in
+  project sharing.
 - `view_task_form2_inherit`, `view_task_kanban_inherit` (inherits the task card view
   `project.view_task_card` since 20.0) — add mirror fields and lock stage/state via
   `state_change_permission`.
@@ -113,7 +132,8 @@ sale_order_task/
     project_task_type_link.py # stage pair model
     product_template.py       # service_tracking + so_task_template_id
     sale_order_line.py        # _timesheet_service_generation
-  views/                      # form/list/card inherits + menu
+  views/                      # form/list/card inherits (backend + project sharing) + menu
+  static/src/project_sharing/kanban_record_patch.esm.js  # locked cards not draggable in project sharing
   security/ir.access.csv
   tests/
     test_sale_order_task.py       # merge + mirror + dependency stripping

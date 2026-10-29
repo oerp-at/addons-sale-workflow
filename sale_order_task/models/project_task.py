@@ -92,7 +92,15 @@ class ProjectTask(models.Model):
         "status of the task. "
         '"No Synchronization" means both tasks have their own stage and status.',
     )
-    state_change_permission = fields.Boolean(compute="_compute_state_change_permission")
+    # compute_sudo: portal users read it in project sharing, but not the sync fields
+    # behind it.
+    state_change_permission = fields.Boolean(
+        compute="_compute_state_change_permission", compute_sudo=True
+    )
+
+    @property
+    def TASK_PORTAL_READABLE_FIELDS(self):
+        return super().TASK_PORTAL_READABLE_FIELDS | {"state_change_permission"}
 
     def _get_mirror_project(self):
         """Mirror project, read in the task's own company first.
@@ -116,10 +124,14 @@ class ProjectTask(models.Model):
             return super(
                 models.Model, self.with_context(ignore_history_divergence=False)
             ).write(vals)
+        # Portal users with project sharing may change stage and status, but the sync
+        # fields are not in their field list: read them and write the mirror with
+        # sudo. sudo keeps the user, so the chatter still shows them as author.
+        tasks = self.sudo()
         if not self.env.context.get("is_mirror_write") and (
             "stage_id" in vals or "state" in vals
         ):
-            for task in self:
+            for task in tasks:
                 if (
                     task.state_sync_direction == "original"
                     and task.is_mirror
@@ -134,7 +146,7 @@ class ProjectTask(models.Model):
                     )
 
         res = super().write(vals)
-        for task in self:
+        for task in tasks:
             if task.mirror_task_id and not self.env.context.get("is_mirror_write"):
                 # Some fields shouldn't be mirrored and for description we have to do
                 # some special handling
@@ -146,10 +158,10 @@ class ProjectTask(models.Model):
                     mirror_vals.pop("stage_id", None)
                 elif mirror_vals.get("stage_id"):
                     # Sync via link defined in project.task.type.link records
-                    new_stage = self.env["project.task.type"].browse(
+                    new_stage = tasks.env["project.task.type"].browse(
                         mirror_vals.get("stage_id")
                     )
-                    link_id = self.env["project.task.type.link"].search(
+                    link_id = tasks.env["project.task.type.link"].search(
                         [
                             "|",
                             ("first_stage_id", "=", new_stage.id),

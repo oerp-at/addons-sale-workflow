@@ -8,7 +8,7 @@
     "author": "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/sale-workflow",
     "category": "Sales Management",
-    "version": "20.0.1.0.0",
+    "version": "20.0.1.0.1",
     "license": "AGPL-3",
     "depends": ["sale_management", "sale_project"],
     "data": [
@@ -18,5 +18,10 @@
         "views/product_views.xml",
         "security/ir.access.csv",
     ],
+    "assets": {
+        "project.webclient": [
+            "sale_order_task/static/src/project_sharing/**/*",
+        ],
+    },
     "installable": True,
 }
