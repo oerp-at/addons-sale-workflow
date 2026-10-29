@@ -32,6 +32,17 @@ type creates the order project from the template, with optional template tasks.
 
 - Optional template tasks are created only if the order type or an order line asks for
   them.
+- `order_type_project_id` is `copy=False`: a copied order is not tied to the project of
+  its original.
+- **Migrate opened from a project**: `action_migrate_sale_order`
+  (`sale_order_type_management`) copies the order. Opened via the project's "Sales
+  Orders" smart button, the context carries `default_project_id` /
+  `create_for_project_id` (`sale_project`), and `create()` of the copy took the project
+  from there (`project_id` is `copy=False`). The copy then hung on the original's
+  project, confirmation created no project of its own and the lines got no analytic
+  account. The override clears `default_project_id`, `default_task_id`,
+  `create_for_project_id` and `create_for_task_id` in the context before the copy and
+  keeps every other key. Test: `test_migrate_from_project_gets_own_project`.
 
 ## Pitfalls
 

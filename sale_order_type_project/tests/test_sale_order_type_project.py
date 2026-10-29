@@ -526,3 +526,84 @@ class TestSaleOrderTypeProject(TransactionCase):
             sorted(project.task_ids.mapped("name")),
             sorted((mandatory | optional_in).mapped("name")),
         )
+
+    def test_migrate_from_project_gets_own_project(self):
+        """An order migrated while opened from its project ("Sales Orders"
+        smart button: ``default_project_id`` / ``create_for_project_id`` in
+        the context) is a case of its own: no project before confirmation,
+        its own order-type project afterwards, lines on that project's account.
+        """
+        template = self.env["project.project"].create(
+            {
+                "name": "Migrate Template",
+                "is_template": True,
+            }
+        )
+        self.env["project.task"].create(
+            {
+                "name": "Migrate Task",
+                "project_id": template.id,
+            }
+        )
+        target_type = self.env["sale.order.type"].create(
+            {
+                "name": "Migrate Target Type",
+                "project_template_id": template.id,
+            }
+        )
+        source_type = self.env["sale.order.type"].create(
+            {
+                "name": "Migrate Source Type",
+                "project_template_id": template.id,
+                "migration_order_type_ids": target_type.ids,
+            }
+        )
+        partner = self.env["res.partner"].create({"name": "Migrate Partner"})
+        product = self.env["product.product"].create(
+            {
+                "name": "Migrate Service",
+                "type": "service",
+                "invoice_policy": "order",
+            }
+        )
+        source = self.env["sale.order"].create(
+            {
+                "partner_id": partner.id,
+                "type_id": source_type.id,
+                "order_line": [
+                    Command.create({"product_id": product.id, "product_uom_qty": 1})
+                ],
+            }
+        )
+        source.action_confirm()
+        source_project = source.order_type_project_id
+        self.assertTrue(source_project)
+
+        source.migration_order_type_id = target_type
+        action = source.with_context(
+            default_project_id=source_project.id,
+            create_for_project_id=source_project.id,
+        ).action_migrate_sale_order()
+        migrated = self.env["sale.order"].browse(action["res_id"])
+
+        self.assertEqual(migrated.source_sale_order_id, source)
+        self.assertFalse(
+            migrated.project_id, "The project must not come from the context."
+        )
+        self.assertFalse(
+            migrated.order_type_project_id, "The order-type project must not be copied."
+        )
+
+        migrated.action_confirm()
+        new_project = migrated.order_type_project_id
+        self.assertTrue(new_project)
+        self.assertNotEqual(new_project, source_project)
+        self.assertEqual(migrated.project_id, new_project)
+        self.assertEqual(new_project.reinvoiced_sale_order_id, migrated)
+        self.assertEqual(
+            source.project_id, source_project, "The source order keeps its project."
+        )
+        self.assertEqual(source_project.reinvoiced_sale_order_id, source)
+        account = str(new_project.account_id.id)
+        for line in migrated.order_line:
+            self.assertIn(account, ",".join(line.analytic_distribution or {}))

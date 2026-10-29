@@ -2,11 +2,29 @@
 
 from odoo import api, fields, models
 
+# Context keys of the project/task smart buttons ("Sales Orders") that tie a
+# newly created order to that project or task.
+MIGRATE_DROP_CONTEXT = (
+    "default_project_id",
+    "default_task_id",
+    "create_for_project_id",
+    "create_for_task_id",
+)
+
 
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
-    order_type_project_id = fields.Many2one("project.project")
+    order_type_project_id = fields.Many2one("project.project", copy=False)
+
+    def action_migrate_sale_order(self):
+        # The migrated order is a case of its own: on confirmation it gets the
+        # project of its order type. Opened from a project, ``create()`` of the
+        # copy would take the project from the context (``project_id`` is
+        # ``copy=False``) and confirming would then create no project. The keys
+        # are cleared, every other key of the context stays.
+        orders = self.with_context(**dict.fromkeys(MIGRATE_DROP_CONTEXT, False))
+        return super(SaleOrder, orders).action_migrate_sale_order()
 
     def _action_confirm(self):
         for order in self.sudo():
