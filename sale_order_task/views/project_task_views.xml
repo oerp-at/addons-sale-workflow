@@ -55,4 +55,49 @@
             </xpath>
         </field>
     </record>
+
+    <!-- Project sharing: the same lock as in the backend, else a portal user picks a stage the server refuses -->
+    <record id="project_sharing_project_task_view_form_inherit" model="ir.ui.view">
+        <field
+            name="name"
+        >project.sharing.project.task.form.inherit.sale_order_task</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.project_sharing_project_task_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//header/field[@name='stage_id']" position="before">
+                <field name="state_change_permission" invisible="True" />
+            </xpath>
+            <xpath expr="//header/field[@name='stage_id']" position="attributes">
+                <attribute name="readonly">not state_change_permission</attribute>
+            </xpath>
+            <xpath expr="(//field[@name='state'])[1]" position="attributes">
+                <attribute name="readonly">not state_change_permission</attribute>
+            </xpath>
+            <xpath expr="(//field[@name='state'])[2]" position="attributes">
+                <attribute name="readonly">not state_change_permission</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="project_sharing_project_task_view_card_inherit" model="ir.ui.view">
+        <field
+            name="name"
+        >project.sharing.project.task.card.inherit.sale_order_task</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.project_sharing_project_task_view_card" />
+        <field name="arch" type="xml">
+            <xpath
+                expr="//field[@name='state'][@widget='project_task_state_selection']"
+                position="before"
+            >
+                <field name="state_change_permission" invisible="True" />
+            </xpath>
+            <xpath
+                expr="//field[@name='state'][@widget='project_task_state_selection']"
+                position="attributes"
+            >
+                <attribute name="readonly">not state_change_permission</attribute>
+            </xpath>
+        </field>
+    </record>
 </odoo>
