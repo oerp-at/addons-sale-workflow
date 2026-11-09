@@ -112,6 +112,18 @@ msgid "No Invoice"
 msgstr "Keine Rechnung"
 
 #. module: sale_order_type_management
+#. odoo-python
+#: code:addons/sale_order_type_management/models/sale_order.py:0
+msgid ""
+"No invoice may be created for these orders, their order type is set to \"No "
+"Invoice\":\n"
+"%(orders)s"
+msgstr ""
+"Für diese Aufträge darf keine Rechnung erstellt werden, ihre Auftragsart hat "
+"„Keine Rechnung“:\n"
+"%(orders)s"
+
+#. module: sale_order_type_management
 #: model_terms:ir.ui.view,arch_db:sale_order_type_management.sot_sale_order_type_form_view_inherit
 msgid "Options"
 msgstr "Optionen"
