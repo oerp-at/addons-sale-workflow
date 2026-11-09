@@ -1,6 +1,7 @@
 # Copyright 2026, Weboffice IT-Service und Marketing GmbH & Co KG
 
 from odoo import api, fields, models
+from odoo.exceptions import UserError
 
 
 class SaleOrder(models.Model):
@@ -48,6 +49,39 @@ class SaleOrder(models.Model):
         if not allowed:
             return self.env["account.move"]
         return super(SaleOrder, allowed)._create_invoices(final=final, grouped=grouped)
+
+    def _check_no_invoice_order_type(self):
+        """Refuse invoicing when an order's type is flagged ``no_invoice``.
+
+        Names every blocked order so the user can drop it from a selection;
+        nothing is created for the other orders either.
+        """
+        blocked = self.filtered(lambda o: o.type_id.no_invoice)
+        if blocked:
+            raise UserError(
+                self.env._(
+                    "No invoice may be created for these orders, their order type "
+                    'is set to "No Invoice":\n%(orders)s',
+                    orders="\n".join(
+                        f"- {order.name} ({order.type_id.name})" for order in blocked
+                    ),
+                )
+            )
+
+    # Down payment invoices are created by the invoicing wizard directly,
+    # bypassing ``_create_invoices``. Every down payment path (core and
+    # overrides that rebuild it) adds the section and then the lines to the
+    # order first, so both refuse a ``no_invoice`` order before anything is
+    # written.
+    def _create_down_payment_section_line_if_needed(self):
+        self._check_no_invoice_order_type()
+        return super()._create_down_payment_section_line_if_needed()
+
+    def _create_down_payment_lines_from_base_lines(self, down_payment_base_lines):
+        self._check_no_invoice_order_type()
+        return super()._create_down_payment_lines_from_base_lines(
+            down_payment_base_lines
+        )
 
     @api.onchange("type_id")
     def _onchange_type_id(self):
